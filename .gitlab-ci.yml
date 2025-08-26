@@ -1,0 +1,20 @@
+stages:
+  - test
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+
+cypress_tests:
+  stage: test
+  image: cypress/base:16
+  script:
+    - npm ci
+    - npx cypress run --reporter junit --reporter-options "mochaFile=results/test-results-[hash].xml"
+  artifacts:
+    when: always
+    paths:
+      - results/
+      - cypress/screenshots/
+      - cypress/videos/
